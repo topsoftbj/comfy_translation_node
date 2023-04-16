@@ -9,13 +9,20 @@ cwd = os.getcwd ()
 LINEFEED = '\n\n'
 
 def init():
-    folder_path = cwd+"\\python_embeded\\Lib\\site-packages\\translate"
-    tweak_path = cwd +'\\ComfyUI\\web\\extensions\\tweak_keywords_CN2EN'
-    tweak_path_bk = cwd + '\\ComfyUI\\custom_nodes\\comfy_translation_node\\tweak_keywords_CN2EN'
-    if not os.path.isdir(folder_path):
-        print("----------start-------------未发现translate翻译包，正在下载。。。")
-        subprocess.run(["pip", "install", "--target="+cwd+"\\python_embeded\\Lib\\site-packages", "translate"])
-        print("-----------end------------translate下载完成---如看到黄色提示话术，说明有些依赖是已经安装过了，只要不是error均无需在意")
+    # folder_path = cwd+"\\python_embeded\\Lib\\site-packages\\translate"
+    # folder_path = cwd + os.sep.join("\\python_embeded\\Lib\\site-packages\\translate".split("\\"))
+    tweak_path = cwd + os.sep.join('\\web\\extensions\\tweak_keywords_CN2EN'.split("\\"))
+    tweak_path_bk = cwd + os.sep.join('\\custom_nodes\\comfy_translation_node\\tweak_keywords_CN2EN'.split("\\"))
+
+    # print("{}".format(folder_path))
+    print("{}".format(tweak_path))
+    print("{}".format(tweak_path_bk))
+
+    # if not os.path.isdir(folder_path):
+    #     print("----------start-------------未发现translate翻译包，正在下载。。。")
+    #     # print("{} {} {} {}".format("pip", "install", "--target=" + cwd + "\\python_embeded\\Lib\\site-packages", "translate"))
+    #     subprocess.run(["pip", "install", "translate"])
+    #     print("-----------end------------translate下载完成---如看到黄色提示话术，说明有些依赖是已经安装过了，只要不是error均无需在意")
 
     if not os.path.isdir(tweak_path):
         print("----------start-------------未发现tweak_keywords_CN2EN文件夹，正在处理。。。")
