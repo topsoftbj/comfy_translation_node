@@ -3,109 +3,20 @@ import re
 import subprocess
 import os
 import folder_paths
+import shutil
 
 cwd = os.getcwd ()
 # TEXT = '((masterpiece:1.4, best quality)),((masterpiece, best quality)),cute little girl,loli,feel happy,graduate,Cherry blossom on both sides of the road'
 LINEFEED = '\n\n'
 
 def init():
-    # folder_path = cwd+"\\python_embeded\\Lib\\site-packages\\translate"
-    # folder_path = cwd + os.sep.join("\\python_embeded\\Lib\\site-packages\\translate".split("\\"))
     tweak_path = cwd + os.sep.join('\\web\\extensions\\tweak_keywords_CN2EN'.split("\\"))
     tweak_path_bk = cwd + os.sep.join('\\custom_nodes\\comfy_translation_node\\tweak_keywords_CN2EN'.split("\\"))
-
-    # print("{}".format(folder_path))
-    # print("{}".format(tweak_path))
-    # print("{}".format(tweak_path_bk))
-
-    # if not os.path.isdir(folder_path):
-    #     print("----------start-------------未发现translate翻译包，正在下载。。。")
-    #     # print("{} {} {} {}".format("pip", "install", "--target=" + cwd + "\\python_embeded\\Lib\\site-packages", "translate"))
-    #     subprocess.run(["pip", "install", "translate"])
-    #     print("-----------end------------translate下载完成---如看到黄色提示话术，说明有些依赖是已经安装过了，只要不是error均无需在意")
 
     if not os.path.isdir(tweak_path):
         print("----------start-------------未发现tweak_keywords_CN2EN文件夹，正在处理。。。")
         os.rename(tweak_path_bk, cwd + os.sep.join('\\web\\extensions\\tweak_keywords_CN2EN'.split("\\")))
         print("-----------end------------tweak_keywords_CN2EN文件夹处理完成--------------")
-
-
-#     try:
-#         txtPath = './ComfyUI/custom_nodes/comfy_translation_node/openIE.txt'
-#         main_path = cwd+'\\ComfyUI\\main.py'
-#         if os.path.exists(txtPath):
-#             f = open(txtPath, "r", encoding="utf-8")
-#             linesList = f.readlines()
-#             f.close()
-#             IEPath = ''
-#             IEPathOld = ''
-#             SAVE = ''
-#             for t in linesList:
-#                 if "PATH=" in t:
-#                     IEPath = t.replace('PATH=','')
-#                 if "SAVE=" in t:
-#                     SAVE = t.replace('SAVE=','')
-#                 if "PATHOLD=" in t:
-#                     IEPathOld = t.replace('PATHOLD=','')
-#
-#             if len(IEPath) < 4 or IEPath == '""':
-#                 return
-#             print('ewrwere',SAVE == '"FALSE"' or (IEPathOld != IEPath and len(IEPathOld) > 4))
-#             if SAVE == '"FALSE"' or (IEPathOld != IEPath and len(IEPathOld) > 4):
-#                 from shutil import copyfile
-#                 import fileinput
-#
-#                 if IEPathOld != IEPath and len(IEPathOld) > 4:
-#                     old = IEPathOld
-#                     # 定义源文件和备份文件的名字
-#                     source = main_path
-#                     # 定义要替换的代码
-#                     old_code = IEPathOld
-#                     new_code = """
-#                                 IEPath = """+IEPath+""""""
-#                     print(old_code,new_code)
-#                     # 遍历main.py的每一行
-#                     for line in fileinput.input(main_path, inplace=True): # inplace=True表示修改原文件
-#                         if line.strip().startswith('IEPath'): # 如果找到要修改的代码
-#                             line = new_code # 替换成新的代码
-#                         print(line, end='') # 输出到文件中
-#                 else:
-#                     old = ''
-#                     # 定义源文件和备份文件的名字
-#                     source = main_path
-#                     backup = cwd+'\\ComfyUI\\main_bk.py'
-#                     # 复制源文件的内容到备份文件中
-#                     copyfile(source, backup)
-#
-#                     # 定义要删除的代码的开头
-#                     prefix = "webbrowser.open"
-#                     # 定义要替换的代码
-#                     old_code = 'import webbrowser'
-#                     new_code = """
-#                                 import webbrowser
-#
-#                                 IEPath = """+IEPath+"""
-#
-#                                 webbrowser.register('IE', None, webbrowser.BackgroundBrowser(IEPath))
-#
-#                                 webbrowser.get('IE').open("http://{}:{}".format(address, port), new=1,autoraise=True)
-# """
-#                     # 遍历main.py的每一行
-#                     for line in fileinput.input(main_path, inplace=True): # inplace=True表示修改原文件
-#                         if line.strip().startswith(prefix): # 如果发现一行以webbrowser.open开头
-#                             continue # 跳过这一行，不输出到文件中
-#                         if line.strip() == old_code: # 如果找到要修改的代码
-#                             line = new_code # 替换成新的代码
-#                         print(line, end='') # 输出到文件中
-#
-#                 for line in fileinput.input(txtPath, inplace=True): # inplace=True表示修改原文件
-#                     if line.strip() == 'SAVE="FALSE"': # 如果找到要修改的代码
-#                         line = line.replace('FALSE', 'TRUE') # 替换成新的代码
-#                     if line.strip().startswith('PATHOLD'): # 如果找到要修改的代码
-#                         line = 'PATHOLD='+IEPath+'' # 替换成新的代码
-#                     print(line, end='') # 输出到文件中
-#     except :
-#         pass
 
 def symbol_fun(str):
     # 处理中文符号
@@ -279,7 +190,7 @@ class CN2ENTRANS:
     RETURN_TYPES = ("STRING",)
     FUNCTION = "text_trans"
     OUTPUT_NODE = True
-    CATEGORY = "utils"
+    CATEGORY = "xww/trans"
 
     if len(emb) > 0:
         def text_trans(self, text,language,log,transAPI,embeddings,embeddingsStrength):
@@ -301,7 +212,6 @@ class CN2ENTRANS:
                 print('no embeddings----------',text)
             return (text,)
 
-
 class TWEAKKEYWORDS:
     @classmethod
     def INPUT_TYPES(s):
@@ -313,7 +223,7 @@ class TWEAKKEYWORDS:
     FUNCTION = "tweak_keywords"
     OUTPUT_NODE = True
 
-    CATEGORY = "utils"
+    CATEGORY = "xww/trans"
 
     def tweak_keywords(self, text):   
         return {"ui": { "text": text }, "result": (text,)}
